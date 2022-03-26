@@ -1,0 +1,12 @@
+* {
+  font-family: "Sora", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.btn-info {
+  background-color: #15cdfc;
+  border-color: #15cdfc;
+  color: black;
+}
