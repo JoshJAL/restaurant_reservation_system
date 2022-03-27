@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { updateReservationStatus } from "../utils/api";
 
-export default function ReservationRow({ reservation, loadDashboard }) {
+export default function ReservationRow({ reservation, hasBookedReservations }) {
   if (!reservation || reservation.status === "finished") return null;
 
   function handleClick() {
@@ -14,7 +14,6 @@ export default function ReservationRow({ reservation, loadDashboard }) {
         "cancelled",
         abortController.status
       )
-        .then(loadDashboard)
         .then(() => window.location.reload());
 
       return () => abortController.abort();
@@ -34,16 +33,24 @@ export default function ReservationRow({ reservation, loadDashboard }) {
         {reservation.status}
       </td>
 
-      {reservation.status === "booked" && (
+      {reservation.status === "booked" ? (
         <>
           <td>
             <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-              <button type="button">Edit</button>
+              <button className="btn btn-info" type="button">Edit</button>
             </Link>
+          </td>
+
+
+          <td>
+            <a href={`/reservations/${reservation.reservation_id}/seat`}>
+              <button className="btn btn-info" type="button">Seat</button>
+            </a>
           </td>
 
           <td>
             <button
+							className="btn btn-secondary"
               type="button"
               onClick={handleClick}
               data-reservation-id-cancel={reservation.reservation_id}
@@ -51,14 +58,11 @@ export default function ReservationRow({ reservation, loadDashboard }) {
               Cancel
             </button>
           </td>
-
-          <td>
-            <a href={`/reservations/${reservation.reservation_id}/seat`}>
-              <button type="button">Seat</button>
-            </a>
-          </td>
         </>
-      )}
+      ) : hasBookedReservations ?
+				new Array(3).fill(<td />).map(x => x)
+				: null
+			}
     </tr>
   );
 }

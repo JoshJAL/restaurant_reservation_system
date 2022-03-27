@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { listReservations, listTables } from "../utils/api";
 import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -19,16 +19,17 @@ export default function Dashboard() {
   const [tablesError, setTablesError] = useState(null);
   const [date, setDate] = useState(today());
 
-  const tablesBody = () => {
+  const tablesBody = (hasOccupiedTables) => {
     return tables.map((table) => (
-      <TableRow key={table.table_id} table={table} />
+      <TableRow key={table.table_id} hasOccupiedTables={hasOccupiedTables} table={table} />
     ));
   };
 
-  const reservationsBody = () => {
+  const reservationsBody = (hasBookedReservations) => {
     return reservations.map((reservation) => (
       <ReservationRow
         key={reservation.reservation_id}
+				hasBookedReservations={hasBookedReservations}
         reservation={reservation}
       />
     ));
@@ -68,9 +69,12 @@ export default function Dashboard() {
     listTables({}, abortController.signal)
         .then(setTables)
         .catch((err) => setTablesError(err))
-}
+	}
 
-  return (
+	const hasBookedReservations = useMemo(() => reservations.some((res) => res.status === 'booked'), [reservations])
+	const hasOccupiedTables = useMemo(() => tables.some((table) => table.status === 'occupied'), [tables])
+
+	return (
     <main>
       <div
         className="container border rounded"
@@ -91,9 +95,9 @@ export default function Dashboard() {
         <div>
 
           <div>
-            <div style={{ alignItems: "center" }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button
-                style={{ width: "30%", marginRight: "5px", marginLeft: "4%" }}
+                style={{ width: "31%", marginRight: "5px" }}
                 className="btn btn-info"
                 type="button"
                 name="previous"
@@ -104,14 +108,14 @@ export default function Dashboard() {
               <button
                 type="button"
                 name="today"
-                style={{ width: "30%", marginRight: "5px" }}
+                style={{ width: "31%", marginRight: "5px" }}
                 className="btn btn-secondary"
                 onClick={handleClick}
               >
                 Today
               </button>
               <button
-                style={{ width: "30%", marginRight: "5px" }}
+                style={{ width: "31%" }}
                 className="btn btn-info"
                 type="button"
                 name="next"
@@ -143,9 +147,10 @@ export default function Dashboard() {
                   <th>Time</th>
                   <th>People</th>
                   <th>Status</th>
+									{hasBookedReservations ? new Array(3).fill(<th>Action</th>).map((x) => x) : null}
                 </tr>
               </thead>
-              <tbody>{reservationsBody()}</tbody>
+              <tbody>{reservationsBody(hasBookedReservations)}</tbody>
             </table>
 
             <div
@@ -158,7 +163,7 @@ export default function Dashboard() {
             </div>
 
             <ErrorAlert error={tablesError} />
-            
+
               <table>
                 <thead>
                   <tr>
@@ -167,11 +172,12 @@ export default function Dashboard() {
                     <th>Capacity</th>
                     <th>Status</th>
                     <th>Reservation ID</th>
+									{hasOccupiedTables ? <th>Action</th> : null}
                   </tr>
                 </thead>
-                <tbody>{tablesBody()}</tbody>
+                <tbody>{tablesBody(hasOccupiedTables)}</tbody>
               </table>
-            
+
           </div>
         </div>
       </div>

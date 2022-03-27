@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listReservations, formatPhoneNumber } from "../utils/api";
+import { listReservations } from "../utils/api";
 import ReservationRow from "../dashboard/ReservationRow";
 import { Link } from "react-router-dom";
 

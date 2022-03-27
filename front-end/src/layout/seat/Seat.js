@@ -3,21 +3,22 @@ import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../ErrorAlert";
 import { readReservation, seatReservation, listTables } from "../../utils/api";
 
-export default function Seat({ tables, setTables }) {
+export default function Seat() {
     const initialState = { table_id: 0 };
     const [formData, setFormData] = useState(initialState);
     const [oneReservation, setOneReservation] = useState(initialState);
+		const [tables, setTables] = useState([]);
     const [error, setError] = useState(null);
     const {reservation_id} = useParams();
     const history = useHistory();
 
     useEffect(() => {
         const abortController = new AbortController();
-        
+
         readReservation(reservation_id)
             .then(setOneReservation)
             .catch(setError);
-            
+
         listTables()
             .then(setTables)
             .catch(setError);
@@ -46,6 +47,8 @@ export default function Seat({ tables, setTables }) {
             [target.name]: target.value,
         });
     };
+
+		console.log(tables)
 
   const tableMenu = tables ? (
     tables.map((table) => {

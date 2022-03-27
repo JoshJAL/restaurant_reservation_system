@@ -73,7 +73,7 @@ export async function createReservation(reservation, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify(stripReservations(reservation)),
+    body: JSON.stringify({ data: stripReservations(reservation) }),
     signal,
   };
   return await fetchJson(url, options, {});
@@ -121,7 +121,7 @@ export async function createTable(table, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify(stripReservations(table)),
+    body: JSON.stringify({ data: stripReservations({ ...table, capacity: Number(table.capacity) }) }),
     signal,
   };
   return await fetchJson(url, options, {});
@@ -149,9 +149,9 @@ export const formatPhoneNumber = (value) => {
   }
 
   return finalPhoneNumber(currentValue)
-} 
+}
 
-export async function listTables(params, signal) {
+export async function listTables(params = {}, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
@@ -170,7 +170,6 @@ export async function seatReservation(reservation_id, table_id) {
 }
 
 export async function readReservation(reservationId, signal) {
-  console.log(reservationId);
   const url = `${API_BASE_URL}/reservations/${reservationId}`;
   return await fetchJson(url, { signal })
     .then(formatReservationTime)

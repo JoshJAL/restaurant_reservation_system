@@ -26,7 +26,7 @@ const initialFormState = {
 
 export default function New() {
   const history = useHistory();
-
+	const [error, setError] = useState(null)
   const [formData, setFormData] = useState({ ...initialFormState });
 
   const handleChange = ({ target }) => {
@@ -38,12 +38,15 @@ export default function New() {
 
   const onSubmit = async (e) => {
     const abortController = new AbortController();
-    console.log(formData);
-    const reservation = await createReservation(
-      { ...formData, people: Number(formData.people) },
-      abortController.signal
-    );
-    history.push(`/dashboard/${reservation.id}`);
+		try {
+			const reservation = await createReservation(
+				{ ...formData, people: Number(formData.people) },
+				abortController.signal
+			);
+			history.push(`/dashboard/${reservation.reservation_id}`);
+		} catch(e) {
+			setError(e);
+		}
   };
 
   return (
@@ -68,6 +71,7 @@ export default function New() {
         handleChange={handleChange}
         formData={formData}
         onSubmit={onSubmit}
+				reservationError={error}
       />
     </div>
   );

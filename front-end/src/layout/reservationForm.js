@@ -1,17 +1,15 @@
-import React, { useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import ErrorAlert from "./ErrorAlert";
-import { getReservation } from "../utils/api";
 
 export default function ReservationForm({
   onSubmit,
   method,
   formData,
   handleChange,
+	reservationError,
 }) {
   const history = useHistory();
-  const [reservationError, setReservationError] = useState(null);
-  const { reservationId } = useParams();
 
   return (
     <div>

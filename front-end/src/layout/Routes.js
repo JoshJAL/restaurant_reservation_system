@@ -7,6 +7,7 @@ import NewTable from "./NewTable";
 import New from "./New";
 import Search from "../search/Search";
 import Seat from "./seat/Seat";
+import EditReservation from "./EditReservation";
 
 /**
  * Defines all the routes for the application.
@@ -18,26 +19,26 @@ import Seat from "./seat/Seat";
 function Routes() {
   return (
     <Switch>
-      <Route exact={true} path="/">
+      <Route path={["/", "/reservations"]}exact  >
         <Redirect to={"/dashboard"} />
       </Route>
-      <Route exact={true} path="/reservations">
-        <Redirect to={"/dashboard"} />
-      </Route>
-      <Route path="/dashboard">
+      <Route path="/dashboard/:id?" exact>
         <Dashboard />
       </Route>
-      <Route exact={true} path="/reservations/new">
+      <Route path="/reservations/new" exact>
         <New />
       </Route>
-      <Route exact={true} path="/tables/new">
+      <Route path="/tables/new" exact>
         <NewTable />
       </Route>
-      <Route>
-        <Search exact={true} path="/search" />
+      <Route path="/search" exact>
+        <Search />
       </Route>
-      <Route>
-        <Seat exact={true} path="/reservations/:reservation_id/seat" />
+      <Route path="/reservations/:reservation_id/seat" exact>
+        <Seat />
+      </Route>
+			<Route path="/reservations/:reservation_id/edit" exact>
+        <EditReservation />
       </Route>
       <Route>
         <NotFound />

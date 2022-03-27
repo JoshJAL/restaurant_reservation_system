@@ -11,21 +11,21 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  if (req.body.reservation_id) {
-    req.body.status = "occupied";
-    await service.update(req.body.reservation_id, "seated");
+  if (req.body.data.reservation_id) {
+    req.body.data.status = "occupied";
+    await service.update(req.body.data.reservation_id, "seated");
   } else {
-    req.body.status = "free";
+    req.body.data.status = "free";
   }
 
-  const result = await service.create(req.body);
+  const result = await service.create(req.body.data);
 
   res.status(201).json({ data: result[0] });
 }
 
 async function update(req, res) {
   await service.occupy(
-    res.locals.tables.table_id,
+    res.locals.table.table_id,
     res.locals.reservation.reservation_id
   );
   await service.update(res.locals.reservation.reservation_id, "seated");
@@ -44,7 +44,7 @@ async function destroy(req, res, next) {
 // Validators for tables resources
 
 async function validateTableData(req, res, next) {
-  if (!req.body) {
+  if (!req.body.data) {
     return next({
       status: 400,
       message: "Body must include data.",
@@ -54,26 +54,26 @@ async function validateTableData(req, res, next) {
 }
 
 async function validateTableBody(req, res, next) {
-  if (!req.body.table_name || req.body.table_name === "") {
+  if (!req.body.data.table_name || req.body.data.table_name === "") {
     return next({ status: 400, message: "'table_name' cannot be empty." });
   }
 
-  if (req.body.table_name.length < 2) {
+  if (req.body.data.table_name.length < 2) {
     return next({
       status: 400,
       message: `'table_name' must be at least 2 characters long.`,
     });
   }
 
-  if (!req.body.capacity || req.body.capacity === "") {
+  if (!req.body.data.capacity || req.body.data.capacity === "") {
     return next({ status: 400, message: "'capacity' cannot be empty." });
   }
 
-  if (typeof req.body.capacity !== "number") {
+  if (typeof req.body.data.capacity !== "number") {
     return next({ status: 400, message: "'capacity' must be a number." });
   }
 
-  if (req.body.capacity < 1) {
+  if (req.body.data.capacity < 1) {
     return next({ status: 400, message: "'capacity' must be at least 1." });
   }
 
@@ -81,7 +81,7 @@ async function validateTableBody(req, res, next) {
 }
 
 async function validateReservationId(req, res, next) {
-  const { reservation_id } = req.body;
+  const { reservation_id } = req.body.data;
 
   if (!reservation_id) {
     return next({
