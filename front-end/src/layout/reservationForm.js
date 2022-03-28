@@ -106,7 +106,7 @@ export default function ReservationForm({
         <ErrorAlert error={reservationError} />
       </form>
 
-      <div className="row">
+      <div className="row" style={{marginBottom: '15px'}}>
         <button
           type="button"
           style={{ marginRight: "10px", marginLeft: "15px" }}
