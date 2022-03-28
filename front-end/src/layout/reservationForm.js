@@ -4,7 +4,6 @@ import ErrorAlert from "./ErrorAlert";
 
 export default function ReservationForm({
   onSubmit,
-  method,
   formData,
   handleChange,
 	reservationError,

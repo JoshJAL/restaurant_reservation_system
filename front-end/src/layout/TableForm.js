@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "./ErrorAlert";
 import { getReservation } from "../utils/api";
@@ -31,7 +31,7 @@ export default function ReservationForm({ method, loadDashboard }) {
       .catch(setTableError);
   };
 
-  useState(() => {
+  useEffect(() => {
     if (method === "POST") return;
 
     const abortController = new AbortController();

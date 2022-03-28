@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, Link } from "react-router-dom";
 import ErrorAlert from "../ErrorAlert";
 import { readReservation, seatReservation, listTables } from "../../utils/api";
 
@@ -67,20 +67,41 @@ export default function Seat() {
   );
 
   return (
-    <div>
-      <h2>Seat Reservation</h2>
+    <div
+      className="container border rounded"
+      style={{ alignItems: "center", width: "100%", padding: "20px 20px" }}
+    >
+      <div
+        style={{ margin: "10px 0" }}
+        className="h5 row border rounded bg-light"
+      >
+        <div className="breadcrumbContainer" style={{ margin: "15px" }}>
+          <Link to={"/dashboard"} className="text-primary">
+            <span className="oi oi-home" /> Dashboard
+          </Link>
+          <span style={{ margin: "0 5px" }} className="text-secondary">
+            /
+          </span>
+          <span className="text-secondary">Seat Table</span>
+        </div>
+      </div>
+
       <ErrorAlert error={error} />
       <form onSubmit={handleSubmit}>
         <label className="form-label" htmlFor="form-label">
           Select Table:&nbsp;
         </label>
 
-        <select className="form-select" name="table_id" onChange={handleChange}>
+        <br />
+
+        <select className="form-select" name="table_id" onChange={handleChange} style={{ marginBottom: '12px'}}>
           <option defaultValue={0}>Please choose table:</option>
           {tableMenu}
         </select>
 
-        <button className="btn btn-info" type="submit">
+        <br />
+
+        <button className="btn btn-info" type="submit" style={{ marginRight: '10px' }}>
           Submit
         </button>
 
