@@ -1,5 +1,5 @@
 # Description
-I created a restaraunt reservartion system that allows users to create, update, view, and delete reservations made at a restaurant as well as being able to seat those reservations at specific tables adn create new tables if needed.
+I created a restaurant reservation system that allows users to create, update, view, and delete reservations made at a restaurant as well as being able to seat those reservations at specific tables adn create new tables if needed.
 # Technologies 
 * JavaScript
 * React
