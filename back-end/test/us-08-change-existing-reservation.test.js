@@ -65,7 +65,7 @@ describe("US-08 - Change an existing reservation", () => {
         .send({ data: reservation });
 
       expect(response.body.error).toBeUndefined();
-      expect(response.body).toEqual(
+      expect(response.body.data).toEqual(
         expect.objectContaining({
           ...expected,
           reservation_date: expect.stringMatching(expected.reservation_date),
@@ -367,7 +367,7 @@ describe("US-08 - Change an existing reservation", () => {
         .set("Accept", "application/json")
         .send({ data: { status } });
 
-      expect(response.body).toHaveProperty("status", status);
+      expect(response.body.data).toHaveProperty("status", status);
       expect(response.status).toBe(200);
     });
   });

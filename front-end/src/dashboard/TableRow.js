@@ -6,7 +6,7 @@ export default function TableRow({ hasOccupiedTables, table }) {
 
     const handleFinish = (table_id) => {
         const abortController = new AbortController();
-        let result = window.confirm('Is this table ready?\nYou cannot undo this.');
+        let result = window.confirm('Is this table ready to seat new guests?\nThis cannot be undone.');
 
         if (result) {
             finishTable(table_id, abortController.signal)

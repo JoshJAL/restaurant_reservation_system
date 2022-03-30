@@ -37,7 +37,7 @@ describe("US-06 - Reservation status", () => {
         .send({ data });
 
       expect(response.body.error).toBeUndefined();
-      expect(response.body).toEqual(
+      expect(response.body.data).toEqual(
         expect.objectContaining({
           first_name: "first",
           last_name: "last",
@@ -134,7 +134,7 @@ describe("US-06 - Reservation status", () => {
           .set("Accept", "application/json")
           .send({ data: { status } });
 
-        expect(response.body).toHaveProperty("status", status);
+        expect(response.body.data).toHaveProperty("status", status);
         expect(response.status).toBe(200);
       }
     );
@@ -169,7 +169,7 @@ describe("US-06 - Reservation status", () => {
         .set("Accept", "application/json");
 
       expect(reservationResponse.body.error).toBeUndefined();
-      expect(reservationResponse.body).toHaveProperty("status", "seated");
+      expect(reservationResponse.body.data).toHaveProperty("status", "seated");
       expect(reservationResponse.status).toBe(200);
     });
 
@@ -231,7 +231,10 @@ describe("US-06 - Reservation status", () => {
         .set("Accept", "application/json");
 
       expect(reservationResponse.body.error).toBeUndefined();
-      expect(reservationResponse.body).toHaveProperty("status", "finished");
+      expect(reservationResponse.body.data).toHaveProperty(
+        "status",
+        "finished"
+      );
       expect(reservationResponse.status).toBe(200);
     });
   });
@@ -275,7 +278,7 @@ describe("US-06 - Reservation status", () => {
 
       expect(reservationsResponse.body.error).toBeUndefined();
 
-      const finishedReservations = reservationsResponse.body.filter(
+      const finishedReservations = reservationsResponse.body.data.filter(
         (reservation) => reservation.status === "finished"
       );
 

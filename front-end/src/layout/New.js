@@ -1,15 +1,3 @@
-// The /reservations/new page will
-// have the following required and not-nullable fields:
-// First name: <input name="first_name" />
-// Last name: <input name="last_name" />
-// Mobile number: <input name="mobile_number" />
-// Date of reservation: <input name="reservation_date" />
-// Time of reservation: <input name="reservation_time" />
-// Number of people in the party, which must be at least 1 person. <input name="people" />
-// display a Submit button that, when clicked, saves the new reservation, then displays the /dashboard page for the date of the new reservation
-// display a Cancel button that, when clicked, returns the user to the previous page
-// display any error messages returned from the API
-
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import ReservationForm from "./reservationForm";
@@ -26,7 +14,7 @@ const initialFormState = {
 
 export default function New() {
   const history = useHistory();
-	const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({ ...initialFormState });
 
   const handleChange = ({ target }) => {
@@ -38,15 +26,15 @@ export default function New() {
 
   const onSubmit = async (e) => {
     const abortController = new AbortController();
-		try {
-			const reservation = await createReservation(
-				{ ...formData, people: Number(formData.people) },
-				abortController.signal
-			);
-			history.push(`/dashboard/${reservation.reservation_id}`);
-		} catch(e) {
-			setError(e);
-		}
+    try {
+      const reservation = await createReservation(
+        { ...formData, people: Number(formData.people) },
+        abortController.signal
+      );
+      history.push(`/dashboard?date=${reservation.reservation_date.substr(0, 10)}`);
+    } catch (e) {
+      setError(e);
+    }
   };
 
   return (
@@ -71,7 +59,7 @@ export default function New() {
         handleChange={handleChange}
         formData={formData}
         onSubmit={onSubmit}
-				reservationError={error}
+        reservationError={error}
       />
     </div>
   );

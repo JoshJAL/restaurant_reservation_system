@@ -48,12 +48,13 @@ export default function ReservationForm({
           <input
             className="form-control"
             id="mobileNumber"
-            type="number"
+            type="tel"
             name="mobile_number"
             placeholder="Mobile Number"
             style={{ margin: "10px 0" }}
             onChange={handleChange}
             value={formData?.mobile_number ?? ""}
+            pattern="([0-9]{3}-)?[0-9]{3}-[0-9]{4}"
             required={true}
           />
         </label>
@@ -106,7 +107,7 @@ export default function ReservationForm({
         <ErrorAlert error={reservationError} />
       </form>
 
-      <div className="row" style={{marginBottom: '15px'}}>
+      <div className="row" style={{ marginBottom: '15px'}}>
         <button
           type="button"
           style={{ marginRight: "10px", marginLeft: "15px" }}

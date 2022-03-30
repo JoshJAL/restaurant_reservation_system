@@ -349,7 +349,7 @@ describe("US-01 - Create and list reservations", () => {
         .send({ data });
 
       expect(response.body.error).toBeUndefined();
-      expect(response.body).toEqual(
+      expect(response.body.data).toEqual(
         expect.objectContaining({
           first_name: "first",
           last_name: "last",
@@ -369,8 +369,8 @@ describe("US-01 - Create and list reservations", () => {
         .get("/reservations?date=2020-12-31")
         .set("Accept", "application/json");
 
-      expect(response.body).toHaveLength(1);
-      expect(response.body[0].first_name).toBe("Rick");
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].first_name).toBe("Rick");
       expect(response.status).toBe(200);
     });
     test("returns reservations sorted by time (earliest time first)", async () => {
@@ -378,9 +378,9 @@ describe("US-01 - Create and list reservations", () => {
         .get("/reservations?date=2020-12-30")
         .set("Accept", "application/json");
 
-      expect(response.body).toHaveLength(2);
-      expect(response.body[0].first_name).toBe("Bird");
-      expect(response.body[1].first_name).toBe("Frank");
+      expect(response.body.data).toHaveLength(2);
+      expect(response.body.data[0].first_name).toBe("Bird");
+      expect(response.body.data[1].first_name).toBe("Frank");
       expect(response.status).toBe(200);
     });
   });

@@ -50,6 +50,7 @@ export default function Seat() {
 
 		console.log(tables)
 
+  // shows all available tables
   const tableMenu = tables ? (
     tables.map((table) => {
       return (

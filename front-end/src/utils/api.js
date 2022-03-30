@@ -127,30 +127,7 @@ export async function createTable(table, signal) {
   return await fetchJson(url, options, {});
 }
 
-export const formatPhoneNumber = (value) => {
-  const areaCodeAndNextThree = (value) => `(${value.slice(0, 3)}) ${value.slice(3)}`
-  /**
-   * @param {string} value - current phone input value
-   * @returns {string} '(xxx) xxx-', (xxx) xxx-x', '(xxx) xxx-xx', '(xxx) xxx-xxx', '(xxx) xxx-xxxx'
-   */
-  const finalPhoneNumber = (value) =>
-      `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`
-  // only allows 0-9 inputs
-  const convertStringToNumber = (value) => value.replace(/[^\d]/g, '')
-
-  const currentValue = convertStringToNumber(value)
-
-  if (currentValue.length < 4) {
-      return currentValue
-  }
-
-  if (currentValue.length < 7) {
-      return areaCodeAndNextThree(currentValue)
-  }
-
-  return finalPhoneNumber(currentValue)
-}
-
+// API call to list tables
 export async function listTables(params = {}, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   Object.entries(params).forEach(([key, value]) =>
@@ -159,6 +136,7 @@ export async function listTables(params = {}, signal) {
   return await fetchJson(url, { headers, signal }, [])
 }
 
+// Adds seat to reservation
 export async function seatReservation(reservation_id, table_id) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {

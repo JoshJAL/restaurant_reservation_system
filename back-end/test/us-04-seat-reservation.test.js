@@ -142,7 +142,7 @@ describe("US-04 - Seat reservation", () => {
           .send({ data });
 
         expect(response.body.error).toBeUndefined();
-        expect(response.body).toEqual(expect.objectContaining(data));
+        expect(response.body.data).toEqual(expect.objectContaining(data));
         expect(response.status).toBe(201);
       });
     });
@@ -154,11 +154,11 @@ describe("US-04 - Seat reservation", () => {
           .set("Accept", "application/json");
 
         expect(response.body.error).toBeUndefined();
-        expect(response.body).toHaveLength(4);
-        expect(response.body[0].table_name).toBe("#1");
-        expect(response.body[1].table_name).toBe("#2");
-        expect(response.body[2].table_name).toBe("Bar #1");
-        expect(response.body[3].table_name).toBe("Bar #2");
+        expect(response.body.data).toHaveLength(4);
+        expect(response.body.data[0].table_name).toBe("#1");
+        expect(response.body.data[1].table_name).toBe("#2");
+        expect(response.body.data[2].table_name).toBe("Bar #1");
+        expect(response.body.data[3].table_name).toBe("Bar #2");
         expect(response.status).toBe(200);
       });
     });
@@ -172,7 +172,7 @@ describe("US-04 - Seat reservation", () => {
           .set("Accept", "application/json");
 
         expect(response.body.error).toBeUndefined();
-        expect(response.body.reservation_id).toBe(1);
+        expect(response.body.data.reservation_id).toBe(1);
         expect(response.status).toBe(200);
       });
     });

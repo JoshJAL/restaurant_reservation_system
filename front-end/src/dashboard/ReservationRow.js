@@ -1,18 +1,28 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { updateReservationStatus } from "../utils/api";
 
 export default function ReservationRow({ reservation, hasBookedReservations }) {
-  if (!reservation || reservation.status === "finished") return null;
+  const {
+    reservation_id,
+    reservation_date,
+    reservation_time,
+    status,
+    first_name,
+    last_name,
+    mobile_number,
+    people,
+  } = reservation;
+  
+  if (!reservation || status === "finished") return null;
 
   function handleClick() {
-    if (window.confirm("Are you sure you want to cancel?")) {
+    if (window.confirm("Do you want to cancel this reservation?\nThis cannot be undone.")) {
       const abortController = new AbortController();
 
       updateReservationStatus(
-        reservation.reservation_id,
+        reservation_id,
         "cancelled",
-        abortController.status
+        abortController.signal
       )
         .then(() => window.location.reload());
 
@@ -22,29 +32,29 @@ export default function ReservationRow({ reservation, hasBookedReservations }) {
 
   return (
     <tr>
-      <th scope="row">{reservation.reservation_id}</th>
-      <td>{reservation.first_name}</td>
-      <td>{reservation.last_name}</td>
-      <td>{reservation.mobile_number}</td>
-      <td>{reservation.reservation_date.substr(0, 10)}</td>
-      <td>{reservation.reservation_time.substr(0, 5)}</td>
-      <td>{reservation.people}</td>
-      <td data-reservation-id-status={reservation.reservation_id}>
-        {reservation.status}
+      <th scope="row">{reservation_id}</th>
+      <td>{first_name}</td>
+      <td>{last_name}</td>
+      <td>{mobile_number}</td>
+      <td>{reservation_date.substr(0, 10)}</td>
+      <td>{reservation_time.substr(0, 5)}</td>
+      <td>{people}</td>
+      <td data-reservation-id-status={reservation_id}>
+        {status}
       </td>
 
-      {reservation.status === "booked" ? (
+      {status === "booked" ? (
         <>
           <td>
-            <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+            <a href={`/reservations/${reservation_id}/edit`}>
               <button className="btn btn-info" type="button">Edit</button>
-            </Link>
+            </a>
           </td>
 
 
           <td>
-            <a href={`/reservations/${reservation.reservation_id}/seat`}>
-              <button className="btn btn-info" type="button">Seat</button>
+            <a href={`/reservations/${reservation_id}/seat`} className="btn btn-info">
+              Seat
             </a>
           </td>
 
@@ -53,7 +63,7 @@ export default function ReservationRow({ reservation, hasBookedReservations }) {
 							className="btn btn-secondary"
               type="button"
               onClick={handleClick}
-              data-reservation-id-cancel={reservation.reservation_id}
+              data-reservation-id-cancel={reservation_id}
             >
               Cancel
             </button>

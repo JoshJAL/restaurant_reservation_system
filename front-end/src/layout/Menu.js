@@ -1,4 +1,6 @@
 import React from "react";
+// Hamburger Menu when in mobile view
+// Run 'npm install react-icons --save' to install the icons
 import { FaBars } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import "./Menu.css";
@@ -20,7 +22,7 @@ const navStyle = {
 };
 
 
-
+// Click handler for hamburger menu when in mobile view
 function handleClick(e) {
 
   const hamburgerMenu = document.querySelector("#mobile-menu");

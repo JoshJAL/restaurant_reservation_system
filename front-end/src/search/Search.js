@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
 import ReservationRow from "../dashboard/ReservationRow";
@@ -13,6 +13,7 @@ export default function Search() {
     setMobileNumber(target.value);
   };
 
+  // Returns reservation objects for the matching mobile number
   const handleSubmit = (e) => {
     e.preventDefault();
     const abortController = new AbortController();
@@ -21,10 +22,14 @@ export default function Search() {
     listReservations({ mobile_number: mobileNumber }, abortController.signal)
       .then(setReservations)
       .catch(setError);
+      
+      return () => abortController.abort();
+    };
+  
+  // Allows isolation of reservations with status "booked"
+  const hasBookedReservations = useMemo(() => reservations.some((res) => res.status === 'booked'), [reservations])
 
-    return () => abortController.abort();
-  };
-
+  // Displays results or "No reservations found"
   const results = () => {
     return reservations.length > 0 ? (
       reservations.map((r) => (
@@ -64,12 +69,13 @@ export default function Search() {
           <input
             className="form-control"
             id="mobile_number"
-            type="number"
+            type="tel"
             name="mobile_number"
             placeholder="Enter a customer's phone number"
             style={{ margin: "10px 0" }}
             onChange={handleChange}
             value={mobileNumber}
+            pattern="([0-9]{3}-)?[0-9]{3}-[0-9]{4}"
             required={true}
           />
         </label>
@@ -94,9 +100,7 @@ export default function Search() {
             <th>Time</th>
             <th>People</th>
             <th>Status</th>
-            <th>Edit</th>
-            <th>Cancel</th>
-            <th>Seat</th>
+            {hasBookedReservations ? new Array(3).fill(<th>Action</th>).map((x) => x) : null}
           </tr>
         </thead>
         <tbody>{results()}</tbody>

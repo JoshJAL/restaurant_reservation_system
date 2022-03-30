@@ -59,7 +59,7 @@ async function validateReservationData(req, res, next) {
   console.log(req.body.data);
   if (!req.body.data) {
     return next({
-      status: 404,
+      status: 400,
       message: `Body must include data.`,
     });
   }
@@ -182,6 +182,18 @@ async function validateUpdate(req, res, next) {
     return next({
       status: 400,
       message: `Body must include a status field.`,
+    });
+  }
+
+  if (
+    req.body.data.status !== "booked" &&
+    req.body.data.status !== "seated" &&
+    req.body.data.status !== "finished" &&
+    req.body.data.status !== "cancelled"
+    ) {
+  return next({
+      status: 400,
+      message: `"Status" field cannot be ${req.body.data.status}.`,
     });
   }
 

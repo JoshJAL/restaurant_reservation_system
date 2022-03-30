@@ -17,14 +17,20 @@ export default function Dashboard() {
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
-  const [date, setDate] = useState(today());
 
+  const params = new URLSearchParams(window.location.search);
+  const [date, setDate] = useState(params.get('date') || today());
+  
+
+
+  // Returns table objects with the same id as the reservation
   const tablesBody = (hasOccupiedTables) => {
     return tables.map((table) => (
       <TableRow key={table.table_id} hasOccupiedTables={hasOccupiedTables} table={table} />
     ));
   };
 
+  // Returns reservation objects for the proper ID
   const reservationsBody = (hasBookedReservations) => {
     return reservations.map((reservation) => (
       <ReservationRow
@@ -58,6 +64,7 @@ export default function Dashboard() {
 
   useEffect(loadDashboard, [date]);
 
+  // Loads the dashboard with objects for reservations and tables for the proper date 
   function loadDashboard() {
     const abortController = new AbortController()
     setReservationsError(null)
@@ -71,8 +78,10 @@ export default function Dashboard() {
         .catch((err) => setTablesError(err))
 	}
 
+  // Allows isolation of reservations with status "booked"
 	const hasBookedReservations = useMemo(() => reservations.some((res) => res.status === 'booked'), [reservations])
-	const hasOccupiedTables = useMemo(() => tables.some((table) => table.status === 'occupied'), [tables])
+	// Allows isolation of tables with status "occupied"
+  const hasOccupiedTables = useMemo(() => tables.some((table) => table.status === 'occupied'), [tables])
 
 	return (
     <main>
@@ -147,6 +156,7 @@ export default function Dashboard() {
                   <th>Time</th>
                   <th>People</th>
                   <th>Status</th>
+                  {/* If there is a reservation with status "booked" the action buttons will display */}
 									{hasBookedReservations ? new Array(3).fill(<th>Action</th>).map((x) => x) : null}
                 </tr>
               </thead>
@@ -172,6 +182,7 @@ export default function Dashboard() {
                     <th>Capacity</th>
                     <th>Status</th>
                     <th>Reservation ID</th>
+                  {/* If there is a table with status "occupied" the action buttons will display */}
 									{hasOccupiedTables ? <th>Action</th> : null}
                   </tr>
                 </thead>
@@ -184,15 +195,3 @@ export default function Dashboard() {
     </main>
   );
 }
-
-// The /dashboard page will
-// list all reservations for one date only. (E.g. if the URL is /dashboard?date=2035-12-30 then send a GET to /reservations?date=2035-12-30 to list the reservations for that date). The date is defaulted to today, and the reservations are sorted by time.
-// display next, previous, and today buttons that allow the user to see reservations on other dates
-// display any error messages returned from the API
-// display a list of all reservations in one area.
-// each reservation in the list will:
-// Display a "Seat" button on each reservation.
-// The "Seat" button must be a link with an href attribute that equals /reservations/${reservation_id}/seat, so it can be found by the tests.
-// display a list of all tables, sorted by table_name, in another area of the dashboard
-// Each table will display "Free" or "Occupied" depending on whether a reservation is seated at the table.
-// The "Free" or "Occupied" text must have a data-table-id-status=${table.table_id} attribute, so it can be found by the tests.

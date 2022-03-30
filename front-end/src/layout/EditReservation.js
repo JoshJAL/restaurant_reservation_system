@@ -1,3 +1,5 @@
+// Same as reservationForm but with a PUT method, allows edit of entire reservation
+
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams, Link } from "react-router-dom";
 import ReservationForm from "./reservationForm";
@@ -42,7 +44,7 @@ export default function EditReservation() {
       { ...formData, people: Number(formData.people) },
       abortController.signal
     );
-    history.push(`/dashboard/${reservation.reservation_id}`);
+    history.push(`/dashboard?date=${reservation.reservation_date.substr(0, 10)}`);;
   };
 
   return (

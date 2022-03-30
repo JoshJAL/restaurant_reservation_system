@@ -1,8 +1,3 @@
-// have the following required and not-nullable fields:
-// Table name: <input name="table_name" />, which must be at least 2 characters long.
-// Capacity: <input name="capacity" />, this is the number of people that can be seated at the table, which must be at least 1 person.
-// display a Submit button that, when clicked, saves the new table then displays the /dashboard page
-// display a Cancel button that, when clicked, returns the user to the previous page
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
